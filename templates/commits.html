@@ -1,0 +1,121 @@
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+	<title>Commits</title>
+	<link href="{{ url_for('static', filename='code.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<h1>Select your commit</h1>
+	<form class="form-inline" method="POST" action="{{ url_for('dbcommits') }}">
+	  <div class="form-group">
+		<div class="input-group">
+			<span class="input-group-addon">Please select</span>
+			<select name="commitselect" method="GET" action="/">
+			  {% for commit in commits %}
+                {% if commit["URL"] == commitselect %}
+                <option value="{{commit["URL"]}}" selected>{{commit["INFO"]}}</option>
+                {% else %}
+                <option value="{{commit["URL"]}}">{{commit["INFO"]}}</option>
+                {% endif %}
+			  {% endfor %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-default">Go</button>
+	  </div>
+	</form>
+	<form class="form-inline" method="POST" action="{{ url_for('index') }}">
+	  <div class="form-group">
+		<button type="submit" class="btn btn-default">Back</button>
+	  </div>
+	</form>
+	{% if commitselect %}
+	  {% set commit = commits[commitindex] %}
+		  <span style="font-weight: bold;">Commit url: </span>
+		  <span><a href="{{commit["URL"]}}" target="_blank">{{commit["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">ChatGPT url: </span>
+		  <span><a href="{{commit["ChatgptSharing"][0]["URL"]}}" target="_blank">{{commit["ChatgptSharing"][0]["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Scenario category: </span>
+		  <span>{{commit["Category"]}}</span>
+	  <hr/>
+		  <span style="font-weight: bold;">Commit Message: </span>
+		  <span>{{commit["Message"]}}</span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">First Prompt: </span>
+		  <span>{{commit['ChatgptSharing'][0]["AnalysisFeatures"]["FirstPrompt"]}}</span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Number of Prompts: </span>
+		  <span>Total {{commit['ChatgptSharing'][0]["AnalysisFeatures"]["NumberOfPrompts"]}} prompts
+			    (with lengths {{commit['ChatgptSharing'][0]["AnalysisFeatures"]["LengthOfPrompts"]}})</span>
+		  <br/>
+	  <hr/>
+	  <span style="font-weight: bold;">Code Clones Detected: </span>
+	  {% if 'CodeClones' not in commit %}
+		  <span>No clones found</span>
+		  <br/>
+		  <hr/>
+	  {% else %}
+		  <br/>
+		  {% for cclone in commit["CodeClones"] %}
+			  <span style="font-weight: bold;">Filename: {{cclone['Filename']}}</span>
+			  <br/><br/>
+		  	  <span><span style="font-weight: bold;">Message: </span>{{cclone['Message']}}</span>
+			  <br/><br/>
+			  {% if cclone['CloneDetected'] %}
+				  <span><span style="font-weight: bold;">Lines copied: </span>{{cclone['LinesCopied']}}</span>
+				  <br/>
+				  <span><span style="font-weight: bold;">Duplicate ratio: </span>{{cclone["DuplicateRatio"]}}%</span>
+				  <br/>
+				  <span><span style="font-weight: bold;">Code copied from block: </span>{{cclone["CodeBlockIdx"]}}</span>
+				  <br/><br/>
+				  <span style="font-weight: bold;">Duplicate lines: </span>
+				  <br/>
+				  <span style="white-space: pre-line;">{{cclone['CloneDetails']}}</span>
+				  <br/><br/>
+				  {% if 'Found' in cclone["UserCode"] %}
+					  <span style="font-weight: bold;">User Provided Code: </span>  
+					  <span>Found: {{cclone["UserCode"]['Found']}},</span>
+					  <span>Percentage of cloned block contained in first prompt: {{cclone["UserCode"]['SimilarityRatio']}}%</span>
+					  <br/><br/>
+				  {% endif %}
+				  <span><span style="font-weight: bold;">Quality Analysis: </span>{{cclone["Quality"]}}</span>
+				  <br/><br/>
+				  <span style="font-weight: bold;">Prompts needed before copy: </span>
+				  <spa>{{cclone["PromptsBeforeClone"]}}</span>
+				  <br/>
+				  <hr/>
+			  {% endif %}
+		  {% endfor %}
+	  {% endif %}
+	  <span style="font-weight: bold;">Commit Patches: </span>
+	  <span>Total {{commit["CommitsNumber"]}} files commited. (Only files with clones displayed)</span>
+
+	  <br/>
+	  {% for file in commit["CommitPatches"] %}
+		  <span style="font-weight: 500;">Filename: {{file["name"]}}</span>
+		  <span>{{file['patch'] | safe}}</span>
+		  <br/>	
+	  {% endfor %}
+	  <hr/>
+		  <span style="font-weight: bold;">ChatGPT Codes: </span>
+		  {% for code in commit["ChatGPTCodes"] %}
+			  <br/>
+			  <span>Block: {{ loop.index }}. Language: {{code["language"]}}</span>
+			  <span>{{code["content"] | safe}}</span>	  
+		  {% endfor %}
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Full ChatGPT discussion: </span>
+		  <span>{{commit["ChatGPTDiscussion"] | safe}}</span>
+		  <br/>
+		  <!--iframe src="{{commit["ChatgptSharing"][0]["URL"]}}" width="100%" height="100%" frameborder="0"></iframe-->
+		  <br/>
+		  <br/>
+	{% endif %}
+</body>

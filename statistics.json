@@ -1,0 +1,76 @@
+{
+   "Initial": {
+      "Discussions": {
+         "Sources": 61,
+         "SharedLinks": 70,
+         "Prompts": 223,
+         "CodeBlocks": 188
+      },
+      "Pull Requests": {
+         "Sources": 267,
+         "SharedLinks": 301,
+         "Prompts": 996,
+         "CodeBlocks": 975
+      },
+      "Issues": {
+         "Sources": 507,
+         "SharedLinks": 636,
+         "Prompts": 2032,
+         "CodeBlocks": 1739
+      },
+      "Commits": {
+         "Sources": 694,
+         "SharedLinks": 694,
+         "Prompts": 1602,
+         "CodeBlocks": 1828
+      },
+      "Files": {
+         "Sources": 1843,
+         "SharedLinks": 2708,
+         "Prompts": 21097,
+         "CodeBlocks": 14132
+      },
+      "Hacker News": {
+         "Sources": 187,
+         "SharedLinks": 324,
+         "Prompts": 1143,
+         "CodeBlocks": 244
+      },
+      "Links": {
+         "Number": 4733
+      }
+   },
+   "Preprocessing": {
+      "Before": {
+         "Commits": 694,
+         "Code files": 1843,
+         "Shared conversations": 3402,
+         "Generated blocks": 15960
+      },
+      "After": {
+         "Commits": 668,
+         "Code files": 775,
+         "Shared conversations": 1677,
+         "Generated blocks": 13987
+      }
+   },
+   "AnnotationDistribution": {
+      "TotalConversations": 1677,
+      "Distributions": {
+         "Example Usage": 129,
+         "Improve this code": 693,
+         "Other": 110,
+         "Write me this code": 548,
+         "Fix this issue": 159,
+         "Explain this code": 38
+      },
+      "Percentages": {
+         "Example Usage": 7.69,
+         "Improve this code": 41.32,
+         "Other": 6.56,
+         "Write me this code": 32.68,
+         "Fix this issue": 9.48,
+         "Explain this code": 2.27
+      }
+   }
+}

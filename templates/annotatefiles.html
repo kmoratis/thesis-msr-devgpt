@@ -1,0 +1,95 @@
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+	<title>Files</title>
+	<link href="{{ url_for('static', filename='annotate.css') }}" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+  function resizeIframe(obj){
+     obj.style.height = 0;
+     obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+
+</head>
+<body>
+	<table>
+  <tr>
+
+<th>
+	<form class="form-inline" method="POST" action="{{ url_for('dbfiles') }}">
+		<div style="display: none;">
+		<select style="width: 100%;" name="sharingselect" method="GET" action="/" onchange="this.form.submit();">
+            <option value="{{sharings[sharingindex - 1]["URL"]}} - -1" selected>previous sharing</option>
+		</select>
+		</div>
+		<button type="submit" class="button">&#60;</button>
+	</form>
+</th>
+
+<th style="width: 40%;">
+<form style="width: 100%;" class="form-inline" method="POST" action="{{ url_for('dbfiles') }}">
+	  <div style="width: 100%;" class="form-group">
+		<div style="width: 100%;" class="input-group">
+			<select style="width: 100%;" name="sharingselect" method="GET" action="/" onchange="this.form.submit();">
+			  {% for sharing in sharings %}
+                {% if sharing["URL"] == sharingselect %}
+                <option value="{{sharing["URL"]}} - -1" selected>{{sharing["INFO"]}}</option>
+                {% else %}
+                <option value="{{sharing["URL"]}} - -1">{{sharing["INFO"]}}</option>
+                {% endif %}
+			  {% endfor %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-default" style="display: none;">Go</button>
+	  </div>
+	</form>
+</th>
+  {% set sharingclasses = ['Example usage', 'Write me this code', 'Improve this code', 'Fix this issue', 'Explain this code', 'Other'] %}
+<th>
+	<form class="form-inline" method="POST" action="{{ url_for('dbfiles') }}">
+		<div style="display: none;">
+		<select style="width: 100%;" name="sharingselect" method="GET" action="/" onchange="this.form.submit();">
+            <option value="{{sharings[sharingindex + 1]["URL"]}} - -1" selected>previous sharing</option>
+		</select>
+		</div>
+		<button type="submit" class="button">&#62;</button>
+	</form>
+</th>
+
+<th>
+	<span>{{ sharingclasses[sharingannotation] }}</span>
+</th>
+
+
+{% for sharingclass in sharingclasses %}
+<th>
+	{% if sharingselect %}
+	  {% set sharing = sharings[sharingindex] %}
+	<form class="form-inline" method="POST" action="{{ url_for('dbfiles') }}">
+		<div style="display: none;">
+		<select style="width: 100%;" name="sharingselect" method="GET" action="/" onchange="this.form.submit();">
+            <option value="{{sharing["URL"]}} - {{loop.index - 1}}" selected>{{sharingclass}}</option>
+		</select>
+		</div>
+		<button type="submit" class="button">{{sharingclass}}</button>
+	</form>
+	{% endif %}
+</th>
+{% endfor %}
+
+	</table>
+  </tr>
+	{% if sharingselect %}
+	  {% set sharing = sharings[sharingindex] %}
+		  <span style="font-weight: bold;">File url: </span>
+		  <span><a href="{{sharing["Mention"]["MentionedURL"]}}" target="_blank">{{sharing["Mention"]["MentionedURL"]}}</a></span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">ChatGPT url: </span>
+		  <span><a href="{{sharing["URL"]}}" target="_blank">{{sharing["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+	      <div>{{sharing["HTMLContent"] | safe}}</div>
+	{% endif %}
+</body>

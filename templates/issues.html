@@ -1,0 +1,65 @@
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+	<title>Issues</title>
+	<link href="{{ url_for('static', filename='code.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<h1>Select your issue</h1>
+	<form class="form-inline" method="POST" action="{{ url_for('dbissues') }}">
+	  <div class="form-group">
+		<div class="input-group">
+			<span class="input-group-addon">Please select</span>
+			<select name="issueselect" method="GET" action="/">
+			  {% for issue in issues %}
+                {% if issue["URL"] == issueselect %}
+                <option value="{{issue["URL"]}}" selected>{{issue["INFO"]}}</option>
+                {% else %}
+                <option value="{{issue["URL"]}}">{{issue["INFO"]}}</option>
+                {% endif %}
+			  {% endfor %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-default">Go</button>
+	  </div>
+	</form>
+	<form class="form-inline" method="POST" action="{{ url_for('index') }}">
+	  <div class="form-group">
+		<button type="submit" class="btn btn-default">Back</button>
+	  </div>
+	</form>
+	{% if issueselect %}
+	  {% set issue = issues[issueindex] %}
+		  <span style="font-weight: bold;">Issue url: </span>
+		  <span><a href="{{issue["URL"]}}" target="_blank">{{issue["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">ChatGPT url: </span>
+		  <span><a href="{{issue["ChatgptSharing"][0]["URL"]}}" target="_blank">{{issue["ChatgptSharing"][0]["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Issue Title: </span>
+		  <span>{{issue["Title"]}}</span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Issue Body: </span>
+		  <span>{{issue["Body"]}}</span>
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">ChatGPT Codes: </span>
+		  {% for code in issue["ChatGPTCodes"] %}
+			  <br/> 
+			  <span>{{ loop.index }}. Language: {{code["language"]}}</span>
+			  <span>{{code["content"] | safe}}</span>
+		  {% endfor %}
+		  <br/>
+	  <hr/>
+		  <span style="font-weight: bold;">Full ChatGPT discussion: </span>
+		  <span>{{issue["ChatGPTDiscussion"] | safe}}</span>
+		  <br/>
+		  <!--iframe src="{{issue["ChatgptSharing"][0]["URL"]}}" width="100%" height="100%" frameborder="0"></iframe-->
+		  <br/>
+		  <br/>
+	{% endif %}
+</body>

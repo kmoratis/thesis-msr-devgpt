@@ -1,0 +1,48 @@
+{
+   "Sources": [
+      {
+         "Type": "commit",
+         "URL": "https://github.com/CPSC-1520/CPSC-1520-Workbook-A02-dgilleland/commit/...",
+         "Author": "dgilleland",
+         "RepoName": "CPSC-1520/CPSC-1520-Workbook-A02-dgilleland",
+         "RepoLanguage": "CSS",
+         "Sha": "a10ee2fe07a59ab954b8e81f39de2e95fa9e77c0",
+         "Message": "Update lesson 011\n\nDraft content generated through ChatGPT:\r\n\r\n ...",
+         "AuthorAt": "2023-09-28T05:49:17.000-06:00",
+         "CommitAt": "2023-09-28T05:49:17.000-06:00",
+         "ChatgptSharing": [
+             {
+                 "URL": "https://chat.openai.com/share/4cb1ea21-fb2a-4d93-bb05-2d5f2a8e9514",
+                 "Mention": {
+                     "MentionedURL": "https://github.com/CPSC-1520/CPSC-1520-Workbook-A02-dgilleland/commit/...",
+                     "MentionedProperty": "message",
+                     "MentionedAuthor": "dgilleland",
+                     "MentionedText": "Update lesson 011\n\nDraft content generated through ChatGPT: ..."
+                 },
+                 "Status": 200,
+                 "DateOfConversation": "September 28, 2023",
+                 "DateOfAccess": "2023-10-12 23:54:05.589025",
+                 "Title": "JavaScript Function Organization",
+                 "NumberOfPrompts": 1,
+                 "TokensOfPrompts": 267,
+                 "TokensOfAnswers": 605,
+                 "Model": "Plugins",
+                 "Conversations": [
+                     {
+                         "Prompt": "Create a lesson on \"Organizing Functions in JavaScript\". The lesson should ...",
+                         "Answer": "ChatGPTOrganizing Functions in JavaScriptWelcome to this lesson on ...",
+                         "ListOfCode": [
+                             {
+                                 "ReplaceString": "[CODE_BLOCK_0]",
+                                 "Type": "javascript",
+                                 "Content": "const outerFunction = function() {\n    const outerVar = \"I'm outside!\";\n  ..."
+                             }
+                         ]
+                     }
+                 ],
+                 "HTMLContent": "<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\"/><meta ..."
+             }
+         ]
+     }
+   ]
+}

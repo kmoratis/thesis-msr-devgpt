@@ -1,0 +1,118 @@
+<html>
+<head>
+	<meta charset='utf-8'>
+	<meta content='IE=edge,chrome=1' http-equiv='X-UA-Compatible'>
+	<title>files</title>
+	<link href="{{ url_for('static', filename='code.css') }}" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<h1>Select your file</h1>
+	<form class="form-inline" method="POST" action="{{ url_for('dbfiles') }}">
+	  <div class="form-group">
+		<div class="input-group">
+			<span class="input-group-addon">Please select</span>
+			<select name="fileselect" method="GET" action="/">
+			  {% for file in files %}
+                {% if file["URL"] == fileselect %}
+                <option value="{{file["URL"]}}" selected>{{file["INFO"]}}</option>
+                {% else %}
+                <option value="{{file["URL"]}}">{{file["INFO"]}}</option>
+                {% endif %}
+			  {% endfor %}
+			</select>
+		</div>
+		<button type="submit" class="btn btn-default">Go</button>
+	  </div>
+	</form>
+	<form class="form-inline" method="POST" action="{{ url_for('index') }}">
+	  <div class="form-group">
+		<button type="submit" class="btn btn-default">Back</button>
+	  </div>
+	</form>
+	{% if fileselect %}
+	  {% set file = files[fileindex] %}
+		  <span style="font-weight: bold;">File url: </span>
+		  <span><a href="{{file["URL"]}}" target="_blank">{{file["URL"]}}</a></span>
+		  <br/>
+	  <hr/>
+	  <span style="font-weight: bold;">Commit Message: </span>
+	  <span>{{file["CommitMessage"]}}</span>
+	  <br/>
+  <hr/>
+	  <span style="font-weight: bold;">File Content: </span>
+	  <span>{{file["filePatch"] | safe}}</span>
+	  <br/>
+  <hr/>
+  {% for sharing in file["Sharings"] %}
+	  <span style="font-weight: bold;">ChatGPT url: </span>
+	  <span><a href="{{sharing["URL"]}}" target="_blank">{{sharing["URL"]}}</a></span>
+	  <br/>
+	  <hr/>
+	  {% if sharing['ValidLink'] %}	  
+		  <span style="font-weight: bold;">First Prompt: </span>
+		  <span>{{sharing["FirstPrompt"]}}</span>
+		  <br/>
+		  <hr/>
+		  <span style="font-weight: bold;">Number of Prompts: </span>
+		  <span>Total {{sharing["NumberOfPrompts"]}} prompts
+				 (with lengths {{sharing["LengthOfPrompts"]}})</span>
+		  <br/>
+		  <hr/>
+		  <span style="font-weight: bold;">Scenario category: </span>
+		  <span>{{sharing["ScenarioCategory"]}}</span>
+		  <br/>
+		  <hr/>
+		  <span style="font-weight: bold;">Code Clones Detected: </span>
+		  <br/>
+		  <span><span style="font-weight: bold;">Message: </span>{{sharing['CodeClones']['Message']}}</span>
+		  <br/>
+		  {% if sharing['ClonesDetected'] %}
+			  <br/> 	
+			  <span><span style="font-weight: bold;">Lines copied: </span>{{sharing['CodeClones']['LinesCopied']}}</span>
+			  <br/>
+			  <span><span style="font-weight: bold;">Duplicate ratio: </span>{{sharing['CodeClones']['DuplicateRatio']}}%</span>
+			  <br/>
+			  <span><span style="font-weight: bold;">Code copied from block: {{sharing['CodeClones']['CodeBlockIdx']}}</span>
+			  <br/><br/>
+			  <span style="font-weight: bold;">Duplicate lines: </span>
+			  <br/>
+			  <span style="white-space: pre-line;">{{sharing['CodeClones']['CloneDetails']}}</span>
+			  <br/><br/>
+			  {% if 'Found' in sharing['CodeClones']["UserCode"] %}
+				  <span style="font-weight: bold;">User Provided Code: </span>  
+				  <span>{{sharing['CodeClones']["UserCode"]['Found']}},</span>
+				  <span>Percentage of cloned block contained in first prompt: {{sharing['CodeClones']["UserCode"]['SimilarityRatio']}}%</span>
+				  <br/><br/>  
+			  {% endif %}
+			  <span style="font-weight: bold;">Quality Analysis: </span><span>{{sharing['QualityAnalysis']}}</span>
+			  <br/><br/>
+			  <span style="font-weight: bold;">Prompts needed before copy: </span>
+			  <spa>{{sharing['CodeClones']['PromptsBeforeClone']}}</span>
+			  <br/>
+		  {% endif %}
+		  <hr/>
+		  <span style="font-weight: bold;">ChatGPT Codes: </span>
+		  <br/>
+		  {% for code in sharing["ChatGPTCodes"] %}
+			  <br/>
+			  <span>{{ loop.index }}. Language: {{code["language"]}}</span>
+			  <span>{{code["content"] | safe}}</span>
+		  {% endfor %}
+		  <br/>
+		  <hr/>
+	  {% else %}
+		  <span style="font-weight: bold;">Preprocessing: </span>
+		  <span>Invalid link</span>
+		  <br/>
+		  <hr/>
+	  {% endif %}
+	  <span style="font-weight: bold;">Full ChatGPT discussion: </span>
+	  <span>{{sharing["ChatGPTDiscussion"] | safe}}</span>
+	  <br/>
+	  <!-- iframe src="{{file["ChatgptSharing"][0]["URL"]}}" width="100%" height="100%" frameborder="0"></iframe -->
+	  <br/>
+	  <br/>
+	  <hr/>
+  {% endfor %}
+{% endif %}
+</body>
